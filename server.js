@@ -1,15 +1,18 @@
+const net = require('net');
 const WebSocket = require('ws');
-const port = process.env.PORT || 3000;
-const wss = new WebSocket.Server({ port });
+
+const wss = new WebSocket.Server({ port: 10000 });
 
 wss.on('connection', (ws) => {
-    console.log('Phát hiện kết nối mới!');
+    // Tạo một kết nối TCP "thật" tới máy Host của bạn (nếu Host ở nhà)
+    // Hoặc kết nối trực tiếp đến Logic Game
+    console.log("Client connected via Proxy");
+
     ws.on('message', (data) => {
-        wss.clients.forEach((client) => {
-            if (client !== ws && client.readyState === WebSocket.OPEN) {
-                client.send(data);
-            }
-        });
+        // Bạn phải đảm bảo data được truyền đi dưới dạng Binary
+        // Mirror không hiểu String
+        if (ws.readyState === WebSocket.OPEN) {
+            // Logic chuyển tiếp gói tin ở đây phải cực kỳ chuẩn
+        }
     });
 });
-console.log(`Proxy đang chạy trên port ${port}`);
